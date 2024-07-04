@@ -8,11 +8,6 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("GamePlay");
     }
 
-    public void OpenLeaderboard()
-    {
-        Debug.Log("Leaderboards");
-    }
-
     public void ExitGame()
     {
         Application.Quit();

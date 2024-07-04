@@ -1,8 +1,8 @@
+using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -30,6 +30,8 @@ public class GamePlayManager : MonoBehaviour
 
     void Start()
     {
+        SoundManager.Instance.PlayBackgroundMusic();
+
         Title[] AllTitlesOneDim = FindObjectsOfType<Title>();
         foreach (Title t in AllTitlesOneDim)
         {
@@ -109,6 +111,7 @@ public class GamePlayManager : MonoBehaviour
                 LineOfTitles[i + 1].Number = 0;
                 LineOfTitles[i].mergedThisTurn = true;
                 LineOfTitles[i].PlayMergerAnimation();
+                SoundManager.Instance.PlayMergeSound();
                 ScoreManager.Instance.Score += LineOfTitles[i].Number;
                 return true;
             }
@@ -136,6 +139,7 @@ public class GamePlayManager : MonoBehaviour
                 LineOfTitles[i - 1].Number = 0;
                 LineOfTitles[i].mergedThisTurn = true;
                 LineOfTitles[i].PlayMergerAnimation();
+                SoundManager.Instance.PlayMergeSound();
                 ScoreManager.Instance.Score += LineOfTitles[i].Number;
                 return true;
             }
@@ -188,6 +192,7 @@ public class GamePlayManager : MonoBehaviour
     {
         if (moveMade)
         {
+            SoundManager.Instance.PlayMoveSound();
             UpdateEmptyTitle();
             Generate();
 
@@ -309,10 +314,18 @@ public class GamePlayManager : MonoBehaviour
     public void NewGame()
     {
         SceneManager.LoadScene("GamePlay");
+        SoundManager.Instance.PlayBackgroundMusic();
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("GameMenu");
     }
 
     public void GameOver()
     {
+        SoundManager.Instance.PlayLoserSound();
+        SoundManager.Instance.StopBackgroundMusic();
         State = GameState.GameOver;
         GameOverScoreText.text = ScoreManager.Instance.Score.ToString();
         GameOverPanel.SetActive(true);
